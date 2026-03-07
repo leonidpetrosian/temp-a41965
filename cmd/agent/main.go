@@ -13,7 +13,7 @@ import (
 
 const (
 	backendURL = "http://localhost:8080" // In production, use environment variables
-	nodeRegion = "US-East"
+	nodeRegion = "EU-West"
 	publicIP   = "34.62.136.247" // Should be auto-detected or configured
 )
 
@@ -49,7 +49,7 @@ func main() {
 		}
 
 		fmt.Println("Syncing peers...")
-		if err := syncPeers(registeredNode.ID); err != nil {
+		if err := syncPeers(registeredNode.ID, keys.PrivateKey); err != nil {
 			log.Printf("Peer sync failed: %v", err)
 		}
 	}

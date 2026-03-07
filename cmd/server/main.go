@@ -17,6 +17,8 @@ var database *gorm.DB
 func main() {
 	// Initialize Database (Using SQLite for POC/local development ease, but code supports Postgres)
 	// For production, these would come from env variables
+
+	log.Println("Initializing database configuration...")
 	dbConfig := db.Config{
 		Host:     "localhost",
 		Port:     5432,

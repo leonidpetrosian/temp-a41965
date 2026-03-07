@@ -11,7 +11,12 @@ import (
 	"golang.zx2c4.com/wireguard/wgctrl/wgtypes"
 )
 
-func syncPeers(nodeID uint) error {
+func syncPeers(nodeID uint, privateKeyString string) error {
+	privKey, err := wgtypes.ParseKey(privateKeyString)
+	if err != nil {
+		return fmt.Errorf("invalid private key: %v", err)
+	}
+
 	// 1. Fetch peers from backend
 	resp, err := http.Get(fmt.Sprintf("%s/nodes/%d/peers", backendURL, nodeID))
 	if err != nil {
@@ -51,6 +56,7 @@ func syncPeers(nodeID uint) error {
 	}
 
 	err = client.ConfigureDevice("wg0", wgtypes.Config{
+		PrivateKey:   &privKey,
 		Peers:        wgPeers,
 		ReplacePeers: true,
 	})

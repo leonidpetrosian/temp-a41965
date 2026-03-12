@@ -56,7 +56,7 @@ resource "google_compute_instance" "vpn_node" {
     }
   }
 
-  metadata_startup_script = file("${path.module}/scripts/startup.sh")
+  metadata_startup_script = file("${path.module}/../scripts/startup.sh")
 
   tags = ["wireguard", "vpn"]
 

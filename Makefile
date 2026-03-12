@@ -1,13 +1,29 @@
 # Variables
-BINARY_DIR=bin
-TERRAFORM_DIR=terraform
+BINARY_DIR=build
+DEPLOYMENTS_DIR=deployments
+TERRAFORM_DIR=$(DEPLOYMENTS_DIR)/terraform
+PACKER_DIR=$(DEPLOYMENTS_DIR)/packer
+VAGRANT_DIR=$(DEPLOYMENTS_DIR)/vagrant
 GO_CMD=go
 TF_CMD=terraform
 
-.PHONY: all deps build infra-init infra-apply infra-destroy clean help
+.PHONY: all deps build infra-init infra-apply infra-destroy vagrant-up vagrant-destroy packer-init packer-build-local packer-build-gcp clean help
 
 # Default target
 all: help
+
+# Packer operations
+packer-init:
+	@echo "Initializing Packer..."
+	cd $(PACKER_DIR) && packer init .
+
+packer-build-local: build-linux
+	@echo "Building local image with Packer (Vagrant)..."
+	cd $(PACKER_DIR) && packer build -only=source.vagrant.vpn .
+
+packer-build-gcp: build-linux
+	@echo "Building GCP image with Packer..."
+	cd $(PACKER_DIR) && packer build -only=source.googlecompute.vpn .
 
 # Install Go dependencies
 deps:
@@ -46,7 +62,10 @@ infra-destroy:
 
 # Vagrant operations
 vagrant-up: build-linux
-	cd $(TERRAFORM_DIR) && vagrant up
+	cd $(VAGRANT_DIR) && vagrant up
+
+vagrant-destroy:
+	cd $(VAGRANT_DIR) && vagrant destroy -f
 
 # Remove build artifacts
 clean:
@@ -62,8 +81,12 @@ help:
 	@echo "  build          Build agent and server binaries locally"
 	@echo "  build-linux    Build agent and server binaries for Linux/AMD64"
 	@echo "  vagrant-up     Build for Linux and start Vagrant VM"
+	@echo "  vagrant-destroy Destroy Vagrant VM"
 	@echo "  infra-init     Initialize Terraform in $(TERRAFORM_DIR)/"
 	@echo "  infra-apply    Apply Terraform infrastructure"
 	@echo "  infra-destroy  Destroy Terraform infrastructure"
+	@echo "  packer-init    Initialize Packer"
+	@echo "  packer-build-local Build local VM image (Vagrant)"
+	@echo "  packer-build-gcp   Build GCP cloud image"
 	@echo "  clean          Remove build artifacts"
 	@echo "  help           Show this help message"

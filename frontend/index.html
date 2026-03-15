@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPN Control Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="glass-container">
+        <header>
+            <h1>VPN <span>Control</span></h1>
+            <div id="status-indicator" class="status offline">API Offline</div>
+        </header>
+        
+        <main>
+            <div class="tabs">
+                <button class="tab active" data-tab="register" id="tab-btn-register">Register</button>
+                <button class="tab" data-tab="login" id="tab-btn-login">Login</button>
+                <button class="tab" data-tab="dashboard" id="dashboard-tab" style="display: none;">Dashboard</button>
+            </div>
+
+            <section id="register" class="tab-content active">
+                <h2>Create Account</h2>
+                <form id="register-form">
+                    <div class="input-group">
+                        <input type="email" id="reg-email" placeholder="Email Address" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="reg-password" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn primary">Register</button>
+                </form>
+                <div class="msg" id="reg-msg"></div>
+            </section>
+
+            <section id="login" class="tab-content">
+                <h2>Welcome Back</h2>
+                <form id="login-form">
+                    <div class="input-group">
+                        <input type="email" id="log-email" placeholder="Email Address" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="log-password" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn primary">Login</button>
+                </form>
+                <div class="msg" id="log-msg"></div>
+            </section>
+
+            <section id="dashboard" class="tab-content">
+                <h2>Dashboard</h2>
+                <div class="card">
+                    <h3>Connection Status</h3>
+                    <p>Current Token: <span id="token-display">None</span></p>
+                    <button id="btn-connect" class="btn secondary">Test Connect (POST /user/connect)</button>
+                    <button id="btn-config" class="btn secondary">Get Config (GET /user/config/test)</button>
+                    <button id="btn-logout" class="btn outline">Logout</button>
+                </div>
+                <div class="msg" id="dash-msg"></div>
+            </section>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

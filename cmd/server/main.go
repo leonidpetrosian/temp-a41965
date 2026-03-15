@@ -36,6 +36,9 @@ func main() {
 
 	r := gin.Default()
 
+	// Serve the frontend UI for testing
+	r.Static("/ui", "./frontend")
+
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
